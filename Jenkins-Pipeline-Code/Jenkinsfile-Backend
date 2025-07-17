@@ -7,7 +7,7 @@ pipeline {
     environment  {
         SCANNER_HOME=tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('acc-id')
-        AWS_ECR_REPO_NAME = credentials('back-repo')
+        AWS_ECR_REPO_NAME = credentials('back-ecr')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
     }
@@ -26,11 +26,13 @@ pipeline {
             steps {
                 dir('backend') {
                     withSonarQubeEnv('sonar-server') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                          -Dsonar.projectKey=3tier-backend \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://44.200.149.78:9000 \
-                          -Dsonar.login=squ_572a6c3ffb25e519bdc470fc4f9edf92a641dc21 '''
+                        sh ''' 
+                        $SCANNER_HOME/bin/sonar-scanner \
+                                -Dsonar.projectKey=my-back \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=http://3.227.243.121:9000 \
+                                -Dsonar.login=squ_ddb5fa47677dc86fd80c434d84f990a090629e5b 
+                        '''
                     }
                 }
             }
@@ -86,7 +88,7 @@ pipeline {
             }
             steps {
                 dir('kubernetes-files') {
-                    withCredentials([string(credentialsId: 'github-pat', variable: 'git-token')]) {
+                    withCredentials([string(credentialsId: 'git-token', variable: 'git-pat')]) {
                         sh '''
                             git config user.email "mydekstop2604@gmail.com"
                             git config user.name "shubhamkapse2604"
