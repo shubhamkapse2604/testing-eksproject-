@@ -88,9 +88,9 @@ pipeline {
             }
             steps {
                 dir('kubernetes-files') {
-                    withCredentials([string(credentialsId: 'git-token', variable: 'git-pat')]) {
+                    withCredentials([string(credentialsId: 'git-token', variable: 'git-token')]) {
                         sh '''
-                            git config user.email "mydekstop2604@gmail.com"
+                            git config user.email "shubhamkapse2604@gmail.com"
                             git config user.name "shubhamkapse2604"
                             BUILD_NUMBER=${BUILD_NUMBER}
                             echo $BUILD_NUMBER
