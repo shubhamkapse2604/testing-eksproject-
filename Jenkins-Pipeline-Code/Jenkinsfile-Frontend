@@ -7,7 +7,7 @@ pipeline {
     environment  {
         SCANNER_HOME=tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('acc-id')
-        AWS_ECR_REPO_NAME = credentials('repo-ecr-f')
+        AWS_ECR_REPO_NAME = credentials('front-repo')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
     }
@@ -86,7 +86,7 @@ pipeline {
             }
             steps {
                 dir('kubernetes-files') {
-                    withCredentials([string(credentialsId: 'gihub', variable: 'github_pat')]) {
+                    withCredentials([string(credentialsId: 'github-pat', variable: 'token-git')]) {
                         sh '''
                             git config user.email "mydekstop2604@gmail.com"
                             git config user.name "shubhamkapse2604"
@@ -95,7 +95,7 @@ pipeline {
                             sed -i "s#image:.*#image: $REPOSITORY_URI$AWS_ECR_REPO_NAME:$BUILD_NUMBER#g" frontend-deploy-service.yaml
                             git add .
                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${github_pat}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                            git push https://${token-git}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
         
                         '''
                     }
