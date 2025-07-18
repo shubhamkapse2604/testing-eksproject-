@@ -28,10 +28,10 @@ pipeline {
                     withSonarQubeEnv('sonar-server') {
                         sh ''' 
                         $SCANNER_HOME/bin/sonar-scanner \
-                            -Dsonar.projectKey=my-back \
+                            -Dsonar.projectKey=3tier-backend \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://3.227.243.121:9000 \
-                            -Dsonar.login=squ_ddb5fa47677dc86fd80c434d84f990a090629e5b 
+                            -Dsonar.host.url=http://3.231.33.155:9000 \
+                            -Dsonar.login=squ_1643c421663b0cc195df448f8e2697d3d3ffa530 
                         '''
                     }
                 }
@@ -88,16 +88,16 @@ pipeline {
             }
             steps {
                 dir('kubernetes-files') {
-                    withCredentials([string(credentialsId: 'git-token', variable: 'git-token')]) {
+                    withCredentials([string(credentialsId: 'github', variable: 'github')]) {
                         sh '''
-                            git config user.email "shubhamkapse2604@gmail.com"
+                            git config user.email "mydekstop2604@gmail.com"
                             git config user.name "shubhamkapse2604"
                             BUILD_NUMBER=${BUILD_NUMBER}
                             echo $BUILD_NUMBER
                             sed -i "s#image:.*#image: $REPOSITORY_URI$AWS_ECR_REPO_NAME:$BUILD_NUMBER#g" backend-deployment.yaml
                             git add .
                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${git-token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
+                            git push https://${github}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
                         '''
                     }
                 }
