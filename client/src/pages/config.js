@@ -3,6 +3,6 @@
 //export default API_BASE_URL;
 // const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://backend";
 // export default API_BASE_URL;
-const API_BASE_URL = "a745866107f944aae89af01569e2d29d-307274974.us-east-1.elb.amazonaws.com";
+const API_BASE_URL = "http://a4ec32d09f8d7435193b16810fe187d7-1136464172.us-east-1.elb.amazonaws.com";
 export default API_BASE_URL;
 
